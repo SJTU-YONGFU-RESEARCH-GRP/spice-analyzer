@@ -1,0 +1,3 @@
+[submodule "tools/AnalogGym"]
+	path = tools/AnalogGym
+	url = git@github.com:CODA-Team/AnalogGym.git
