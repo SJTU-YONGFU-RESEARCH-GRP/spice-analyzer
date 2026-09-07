@@ -1,0 +1,6 @@
+* Level-1 BJT proxy for SKY130 benches.
+* Open PDK has no public vertical NPN/PNP for bandgap; these fixed Gummel–Poon
+* cards keep educational netlists simulatable. Label results as proxy, not silicon BJT.
+
+.model npn_l1 NPN (IS=1e-16 BF=100 NF=1 VAF=50 IKF=1e-2 XTI=3 EG=1.11 XTB=-1.5 TNOM=27)
+.model pnp_l1 PNP (IS=1e-16 BF=50 NF=1 VAF=30 IKF=5e-3 XTI=3 EG=1.11 XTB=-1.5 TNOM=27)

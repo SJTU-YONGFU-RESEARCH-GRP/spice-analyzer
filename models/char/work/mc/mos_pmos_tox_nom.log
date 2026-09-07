@@ -1,0 +1,17 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * id-vgs pmos_tox t=27.0
+
+Warning: Model issue on line 78 :
+  .model pmos_tox pmos (level=1 vto=   -7.000000000000000e-01     kp=    4 ...
+unrecognized parameter (tcv) - ignored
+unrecognized parameter (bex) - ignored
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 331
+Note: Simulation executed from .control section 

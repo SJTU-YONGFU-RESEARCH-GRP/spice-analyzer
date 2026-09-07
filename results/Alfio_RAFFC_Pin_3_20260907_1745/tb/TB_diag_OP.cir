@@ -1,0 +1,34 @@
+* Diagnostic OP for Alfio_RAFFC_Pin_3
+.include Alfio_RAFFC_Pin_3
+.include Alfio_RAFFC_Pin_3.params
+.include sky130_tt_01v8.spice
+
+.PARAM supply_voltage = 1.8
+.PARAM VCM = 0.9
+.PARAM PARAM_CLOAD = 'CLOAD'
+
+V1 vdd 0 'supply_voltage'
+V2 vss 0 0
+Vinp vinp 0 'VCM'
+Vinn vinn 0 'VCM'
+
+Xop vss vdd vinn vinp vout alfio_raffc_pin_3
+Cload vout 0 'PARAM_CLOAD'
+
+.control
+set noaskquit
+op
+print v(vout) v(vinp) v(vinn)
+print v(xop.net050) v(xop.net013) v(xop.net043) v(xop.net31) v(xop.net063)
+print v(xop.voutn) v(xop.vb3) v(xop.vb4) v(xop.net1)
+print i(v1)
+* AC open-loop (no feedback)
+ac dec 20 0.1 1G
+print vdb(vout) vp(vout)
+wrdata ../figures/bode_ol_mag.dat vdb(vout)
+wrdata ../figures/bode_ol_phase.dat vp(vout)
+meas ac dcgain find vdb(vout) at=0.1
+meas ac ugf when vdb(vout)=0
+print dcgain ugf
+.endc
+.end

@@ -1,0 +1,15 @@
+# opamp characterization metrics
+
+diff_acm_voc_slope = 10
+diff_av0_ideal_dB = 120
+diff_av0_nonideal_dB = 79.9996
+diff_cm_to_dm_slope = 0
+diff_gbw_ideal_Hz = 1e+08
+diff_gbw_nonideal_Hz = 1e+06
+se_acm_slope = 4.39697
+se_av0_ideal_dB = 120
+se_av0_nonideal_dB = 80.0039
+se_buf_maxabs_err_ideal_mV = 0.000701
+se_buf_maxabs_err_nonideal_mV = 1.60682
+se_gbw_ideal_Hz = 1e+08
+se_gbw_nonideal_Hz = 1.00051e+06

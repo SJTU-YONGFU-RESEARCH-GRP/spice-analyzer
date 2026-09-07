@@ -1,0 +1,23 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * quick op check for alfio_raffc_pin_3
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 1
+v(vout) = 2.929481e-02
+v(xop.net050) = 4.947430e-01
+v(xop.net013) = 1.126524e-02
+v(xop.net043) = 8.270365e-01
+v(xop.net063) = 7.283371e-02
+v(xop.net1) = 7.184495e-02
+v(xop.vb3) = 1.004513e+00
+v(xop.vb4) = 7.928521e-01
+v(xop.net31) = 1.798876e+00
+v(xop.voutn) = 4.947430e-01
+i(vdd) = -1.61183e-04
+Note: Simulation executed from .control section 

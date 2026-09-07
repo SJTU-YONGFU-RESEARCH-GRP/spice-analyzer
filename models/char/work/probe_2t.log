@@ -1,0 +1,30 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * probe 2t topologies
+
+Warning: Model issue on line 61 :
+  .model pmos_rvt pmos (level=1 vto=   -5.000000000000000e-01     kp=    1 ...
+unrecognized parameter (tcv) - ignored
+unrecognized parameter (bex) - ignored
+
+Warning: Model issue on line 65 :
+  .model nmos_nat nmos (level=1 vto=    0.000000000000000e+00     kp=    2 ...
+unrecognized parameter (tcv) - ignored
+unrecognized parameter (bex) - ignored
+
+Warning: Model issue on line 69 :
+  .model nmos_hvt nmos (level=1 vto=    7.000000000000000e-01     kp=    2 ...
+unrecognized parameter (tcv) - ignored
+unrecognized parameter (bex) - ignored
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 1
+v(vrefa) = 7.635802e-01
+v(vrefb) = 1.229571e+00
+v(vrefc) = 9.481925e-01
+Note: Simulation executed from .control section 
