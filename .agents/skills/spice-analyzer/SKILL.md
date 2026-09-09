@@ -1,4 +1,4 @@
-﻿---
+---
 name: spice-analyzer
 description: Analyze analog SPICE netlists (any origin -- user paste, local file, benchmark suite, or foundry deck) with step-by-step small-signal hand analysis (no skipped algebra; TF Steps 4.0--4.4 with per-node KCL/Miller in 4.3; mandatory Hand tables T1--T5 mirrored from algebra), fully filled report tables T0--T10, multi-PDK ngspice benches (cmos then sky130 / IHP SG13G2 / GF180 by default), corners and Monte Carlo, mandatory CMRR/PSRR/noise/corner/MC plots, hand-vs-sim Bode overlays, clickable TOC LaTeX/PDF reports under results/. Use when the user provides a netlist, asks for AC/small-signal analysis, amplifier validation, PDK fitting/benching, corner/MC sweeps, or spice-analyzer reports.
 ---
