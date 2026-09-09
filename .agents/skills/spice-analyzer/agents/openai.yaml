@@ -1,0 +1,7 @@
+interface:
+  display_name: "SPICE Analyzer"
+  short_description: "Analyze analog SPICE netlists with theory and simulation"
+  default_prompt: "Use $spice-analyzer to analyze my amplifier netlist and produce a hand-versus-simulation report."
+
+policy:
+  allow_implicit_invocation: true
