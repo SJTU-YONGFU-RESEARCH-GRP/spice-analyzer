@@ -26,6 +26,69 @@ Hard rule (see skill Rules): **all report and skill-facing prose is English.**
 
 Plot script string literals (matplotlib / System.Drawing titles and axis labels) must also stay English.
 
+## Agentic model provenance (table TA)
+
+Every report must record **which AI host/product and model(s)** ran the spice-analyzer workflow. This is independent of SPICE/PDK device models.
+
+**Artifacts:**
+
+| Path | Content |
+|------|---------|
+| `report.tex` → PDF | `\section{Analysis provenance}` + **table TA** (TOC entry) |
+| `results/<run_id>/agent_provenance.md` | Same facts in Markdown (English) |
+| `summary.md` | Short "Agentic models:" bullet mirroring TA |
+
+**Do / Don't:**
+
+| Do | Don't |
+|----|--------|
+| Host product (Cursor, Claude Code, Codex, \ldots) + model display name | Leave TA blank or omit the section |
+| Slug/id when known (`claude-opus-4-6`, `gpt-5.4`, \ldots) | Invent a model name the host did not disclose |
+| One row per distinct model / subagent role | Confuse TA with BSIM / `cmos.lib` / PDK rows |
+| `unknown (not disclosed by host)` in Model if needed | Soft-delete provenance because the slug is hidden |
+| Skill path `.agents/skills/spice-analyzer` under the table | Brand dataset suites in Notes |
+
+**LaTeX skeleton (TA):**
+
+```latex
+\section{Analysis provenance}
+\subsection{Agentic models}
+% Table TA -- fill every cell; add a row per distinct model / subagent.
+\begin{center}
+{\small
+\begin{tabular}{@{}llllp{0.28\linewidth}@{}}
+\toprule
+Role & Host & Model & Scope & Notes \\
+\midrule
+Primary orchestrator & Cursor & Composer & ingest--report & skill spice-analyzer \\
+% Hand-analysis author & ... & ... & §2 & ... \\
+% Simulation / recovery & ... & ... & §3--4e & ... \\
+% Report LaTeX & ... & ... & §6 & ... \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\footnotesize Skill path: \texttt{.agents/skills/spice-analyzer}.
+Optional: ngspice version, OS, plot backend (Python / PowerShell).
+```
+
+**`agent_provenance.md` template:**
+
+```markdown
+# Agentic provenance
+
+- Skill: spice-analyzer (`.agents/skills/spice-analyzer`)
+- Run id: <run_id>
+- Date: <ISO or English date>
+
+| Role | Host | Model | Scope | Notes |
+|------|------|-------|-------|-------|
+| Primary orchestrator | Cursor | Composer | ingest--report | single-agent run |
+
+Toolchain (optional): ngspice <ver>; plots via Python|PowerShell.
+```
+
+---
+
 ## Amplifier pin convention
 
 Document the DUT subcircuit pin order from the netlist (do not assume a fixed order). Example patterns:
@@ -334,6 +397,10 @@ Bare `---` in Hand/error/Match columns is a **skill fail**. Use typed placeholde
 
 **Hard rule:** if a Hand number appears in §2 equations, it **must** also appear in T1--T5 / T6. `no hand model` is **only** for underived extended specs (CMRR/PSRR/noise/...), never for core \(A_0\)/GBW/PM/\(P\) when a TF or OP-\(g_m\) scaling exists.
 
+### Agentic provenance (TA) -- every run
+
+See [Agentic model provenance](#agentic-model-provenance-table-ta) above. Ship TA in the PDF **and** `agent_provenance.md` before claiming done.
+
 ### §2 tables (T1--T5) -- primary PDK
 
 Copy these skeletons into `report.tex` (fill every cell):
@@ -565,6 +632,14 @@ Default N=200 mismatch. Deliverables: `mc_results.csv`, `mc_summary.md`, figures
 \clearpage
 % Language: English only in all sections, captions, and tables (skill Rules).
 
+\section{Analysis provenance}
+\subsection{Agentic models}
+% Table TA: Role | Host | Model | Scope | Notes (mandatory).
+% Mirror to agent_provenance.md and a short bullet in summary.md.
+% Do not invent model ids; use ``unknown (not disclosed by host)'' if needed.
+\subsection{Toolchain notes}
+% Optional: ngspice version, OS, Python vs PowerShell plots.
+
 \section{Circuit under test}
 \subsection{Netlist and topology}
 % Source path: verbatim filesystem path OR ``user-provided paste'' only.
@@ -611,8 +686,9 @@ Default N=200 mismatch. Deliverables: `mc_results.csv`, `mc_summary.md`, figures
 
 **Required content rules:**
 
+- **Agentic provenance:** table **TA** + `agent_provenance.md` (skill §6); TOC section before Circuit under test.
 - **Table + figure:** each results block that embeds plots must also show a metrics / corner / MC **table** (not figures alone).
-- **Filled cells:** every required table T0--T10 applicable to the run; no blank/`---`/`TBD` data cells -- see Table completeness above and skill §6.
+- **Filled cells:** every required table TA + T0--T10 applicable to the run; no blank/`---`/`TBD` data cells -- see Table completeness above and skill §6.
 - **TF how/why:** Step 4 substeps 4.0--4.4 in the PDF.
 - **Netlist appendix:** `\lstinputlisting` of the results-copy DUT + fitted params (primary PDK). Note upstream path and seeds.
 - Prefer `\includegraphics{...png}` from skill `.agents/skills/spice-analyzer/plotting/` (dev-plot). Avoid fragile high `pgfplots` compat on old MiKTeX.
@@ -638,7 +714,7 @@ Default N=200 mismatch. Deliverables: `mc_results.csv`, `mc_summary.md`, figures
 
 ## Definition of done (short)
 
-PDF with **clickable TOC** + anti-skip Steps 0--7.5 (+8) including **TF Steps 4.0--4.4 (how/why)** + **fully filled tables T0--T10** (no bare `---` cells) + `cmos` + **each present open PDK** (or hard-skip) + corners/MC + CMRR/PSRR/noise + **figures F1--F10** embedded or hard-skipped. No "data on disk only." F1/F2 must be hand-vs-sim overlays when §2 poles/zeros exist (blue=sim, red=hand) or hard-skipped with reason.
+PDF with **clickable TOC** + **TA agentic provenance** + anti-skip Steps 0--7.5 (+8) including **TF Steps 4.0--4.4 (how/why)** + **fully filled tables TA + T0--T10** (no bare `---` cells) + `cmos` + **each present open PDK** (or hard-skip) + corners/MC + CMRR/PSRR/noise + **figures F1--F10** embedded or hard-skipped. No "data on disk only." F1/F2 must be hand-vs-sim overlays when §2 poles/zeros exist (blue=sim, red=hand) or hard-skipped with reason.
 
 ## Run layout
 
@@ -646,7 +722,7 @@ PDF with **clickable TOC** + anti-skip Steps 0--7.5 (+8) including **TF Steps 4.
 
 ```
 results/<run_id>/
-  report.tex / report.pdf / summary.md
+  report.tex / report.pdf / summary.md / agent_provenance.md
   cmos/{tb,sim,figures}/
   sky130/{tb,sim,figures}/
   ihp/{tb,sim,figures}/

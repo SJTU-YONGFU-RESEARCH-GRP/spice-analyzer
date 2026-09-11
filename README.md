@@ -31,7 +31,7 @@ Analyze analog SPICE netlists with step-by-step small-signal hand analysis, mult
 | Simulation | Educational `cmos.lib` first, then every open PDK present under `models/pdk/` (sky130, IHP SG13G2, GF180) |
 | Corners / MC | Default corners `tt,ff,ss`; Monte Carlo N=200 mismatch (unless opted out) |
 | Specs & plots | CMRR, PSRR, noise, corner/MC bars, hand-vs-sim Bode overlays (F1–F10) |
-| Reports | Clickable-TOC LaTeX → PDF under one `results/<run_id>/` |
+| Reports | Clickable-TOC LaTeX → PDF under one `results/<run_id>/`; **agentic model provenance** (table TA + `agent_provenance.md`) |
 | Scope | Phase 1: amplifiers (op-amp / OTA). Voltage references and other blocks are planned later |
 
 Netlists are **source-agnostic**: paste, local path, or any folder. Do not brand upstream suites or datasets in reports (path/paste citation only). See the skill [Inputs](.agents/skills/spice-analyzer/SKILL.md) section.

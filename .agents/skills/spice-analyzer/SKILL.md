@@ -1,11 +1,11 @@
 ---
 name: spice-analyzer
-description: Analyze analog SPICE netlists (any origin -- user paste, local file, benchmark suite, or foundry deck) with step-by-step small-signal hand analysis (no skipped algebra; TF Steps 4.0--4.4 with per-node KCL/Miller in 4.3; mandatory Hand tables T1--T5 mirrored from algebra), fully filled report tables T0--T10, multi-PDK ngspice benches (cmos then sky130 / IHP SG13G2 / GF180 by default), corners and Monte Carlo, mandatory CMRR/PSRR/noise/corner/MC plots, hand-vs-sim Bode overlays, clickable TOC LaTeX/PDF reports under results/. Use when the user provides a netlist, asks for AC/small-signal analysis, amplifier validation, PDK fitting/benching, corner/MC sweeps, or spice-analyzer reports.
+description: Analyze analog SPICE netlists (any origin -- user paste, local file, benchmark suite, or foundry deck) with step-by-step small-signal hand analysis (no skipped algebra; TF Steps 4.0--4.4 with per-node KCL/Miller in 4.3; mandatory Hand tables T1--T5 mirrored from algebra), fully filled report tables T0--T10 plus agentic-model provenance (TA), multi-PDK ngspice benches (cmos then sky130 / IHP SG13G2 / GF180 by default), corners and Monte Carlo, mandatory CMRR/PSRR/noise/corner/MC plots, hand-vs-sim Bode overlays, clickable TOC LaTeX/PDF reports under results/. Use when the user provides a netlist, asks for AC/small-signal analysis, amplifier validation, PDK fitting/benching, corner/MC sweeps, or spice-analyzer reports.
 ---
 
 # Spice Analyzer
 
-Validate an analog netlist: **full** small-signal derivation -> educational `cmos.lib` smoke -> **every open PDK present** (sky130 / IHP / GF180) with **corners** + **MC** -> full amp specs with **embedded plots** -> theory-vs-sim -> LaTeX/PDF with **clickable TOC** under `results/`.
+Validate an analog netlist: **full** small-signal derivation -> educational `cmos.lib` smoke -> **every open PDK present** (sky130 / IHP / GF180) with **corners** + **MC** -> full amp specs with **embedded plots** -> theory-vs-sim -> LaTeX/PDF with **clickable TOC** and **agentic model provenance (TA)** under `results/`.
 
 **Do not stop early.** A PDF that only documents a collapsed bias / placeholder sizing / failed match is incomplete unless recovery was attempted and hard-blocked (see §4b and Definition of done).
 
@@ -81,8 +81,8 @@ Spice Analyzer Progress:
 - [ ] 4d. Monte Carlo (N=200 mismatch unless opted out) + MC plots
 - [ ] 4e. Extended specs (CMRR, PSRR+/-, noise density+spots, vos) + plots
 - [ ] 5. Compare theory vs sim (re-derive from final OP; fill Hand|Sim|error)
-- [ ] 6. Write LaTeX + PDF (TOC + figures + **fully filled tables**)
-- [ ] 6b. Pre-PDF audit: empty cells, TF derivation depth, anti-skip
+- [ ] 6. Write LaTeX + PDF (TOC + figures + **fully filled tables** + **agentic provenance TA**)
+- [ ] 6b. Pre-PDF audit: empty cells, TF derivation depth, anti-skip, **TA filled**
 ```
 
 ### 1. Ingest netlist
@@ -177,7 +177,7 @@ Write decks under `results/<run_id>/` (snapshot DUT + params). Prefer a user-sup
 
 ```
 results/<run_id>/
-  report.tex / report.pdf / summary.md
+  report.tex / report.pdf / summary.md / agent_provenance.md
   cmos/{tb,sim,figures}/
   sky130/{tb,sim,figures}/   # when present / requested
   ihp/{tb,sim,figures}/
@@ -259,12 +259,37 @@ Cross-backend summary table required when >=2 backends ran. Do not end on first 
 **Required PDF features:**
 
 1. **Clickable table of contents** -- `\usepackage{hyperref}` + `\tableofcontents` after `\maketitle` (run pdflatex/latexmk **twice**). Use `\section`/`\subsection` (not only `\subsection*`) so TOC entries and links work. Optional: `\usepackage{bookmark}`.
-2. **All mandatory figures embedded** with captions and backend labels (see checklist below).
-3. Full §2 derivation with anti-skip compliance (**including Steps 4.0--4.4**).
-4. Per-PDK results sections (cmos, sky130, ihp, gf180 as applicable) + corners/MC + match assessment.
-5. **All required tables present and fully filled** (see Table completeness below).
+2. **Agentic model provenance (TA)** -- near the front of the PDF (see below); also write `agent_provenance.md` and mirror a short block in `summary.md`.
+3. **All mandatory figures embedded** with captions and backend labels (see checklist below).
+4. Full §2 derivation with anti-skip compliance (**including Steps 4.0--4.4**).
+5. Per-PDK results sections (cmos, sky130, ihp, gf180 as applicable) + corners/MC + match assessment.
+6. **All required tables present and fully filled** (see Table completeness below).
 
 Compile: `latexmk -pdf` or `pdflatex` **twice**. Skeleton: [reference.md](reference.md) -- LaTeX report skeleton.
+
+#### Agentic model provenance (mandatory)
+
+Document **which AI agent host and model(s)** produced this analysis so a reader can reproduce or audit the agentic workflow. This is **not** the SPICE/PDK device-model section (that stays under backends / Simulation setup).
+
+**Where:** numbered `\section{Analysis provenance}` (or subsection under Circuit under test) **before** Small-signal analysis, with a clickable TOC entry. Ship the same content in `results/<run_id>/agent_provenance.md`.
+
+**Table TA** (minimum columns -- all cells filled):
+
+| Column | Content |
+|--------|---------|
+| Role | e.g. primary orchestrator, hand-analysis author, simulation / recovery, report LaTeX, figure render, Task/subagent explore |
+| Host product | Cursor / Claude Code / Codex / ChatGPT / other (honest product name) |
+| Model | User-facing model name **and** slug/id when known (e.g. `Composer`, `claude-opus-4-6`, `gpt-5.4`). If the host hides the slug, use the disclosed display name + `slug unknown` |
+| Scope | Which workflow stages this row covered (ingest, §2, §3--4e, §5--6, plotting, \ldots) |
+| Notes | Parallel subagents, model switches mid-run, human edits, or `single-agent run` |
+
+**Fill rules:**
+
+- Record **every** distinct model that materially authored analysis, decks, recovery, or report text. One primary row is the minimum; add rows for Task/subagents or mid-run model changes.
+- Prefer concrete ids over marketing fluff. Do **not** invent a model name -- if undisclosed, write `unknown (not disclosed by host)` and still fill Host + Role + Scope.
+- Always include skill id: `spice-analyzer` and the skill path used (e.g. `.agents/skills/spice-analyzer`).
+- Optional but recommended one-liners in the same section: ngspice version string (if available), OS host, and whether plotting used Python or PowerShell fallback.
+- English only; no dataset/suite branding.
 
 #### Mandatory figure checklist (amplifiers)
 
@@ -306,10 +331,11 @@ Prefer PDF/PNG in `figures/` with `\includegraphics` (verify curves visible in t
 
 **Lesson from prior runs:** agents often derive Hand numbers in `align` blocks but ship T4/T6/T7 with blank Hand cells or `no hand model` for core metrics. **That is a skill fail.** Algebra without mirrored table rows does not count as complete.
 
-**Required tables (amplifiers)** -- create each when the corresponding stage ran; every data cell filled; **T1--T5 are mandatory on the primary PDK** (not "prefer"):
+**Required tables (amplifiers)** -- create each when the corresponding stage ran; every data cell filled; **T1--T5 are mandatory on the primary PDK** (not "prefer"); **TA is mandatory on every run**:
 
 | Table ID | Where | Minimum columns (all cells filled) |
 |----------|-------|--------------------------------------|
+| TA | Analysis provenance (front of PDF) | Role / Host product / Model / Scope / Notes -- every distinct agentic model that authored work; include skill `spice-analyzer` path in Notes or a line under the table |
 | T0 | Circuit under test | Device sizing: Role, Device, \(L\), \(W\), \(M\) (or mult) for **all** signal/bias FETs cited in §2; passives row or list |
 | T1 | §2 Step 1 | Bias: Device / hand \(I_D\) / OP \(I_D\) / note (key branches + stage-2/3/FF) |
 | T2 | §2 Step 2 | \(g_m\): Device / hand \(g_m\) (square-law or \(2I_D/V_{\mathrm{ov}}\)) / OP \(g_m\) -- **one row per** \(g_{m1},g_{m2},\ldots\) |
@@ -333,7 +359,7 @@ Prefer PDF/PNG in `figures/` with `\includegraphics` (verify curves visible in t
 **Pre-PDF audit (step 6b):** Before claiming done:
 
 1. Search `report.tex` for bare `---` / `& &` / `TBD` / `TODO` in `tabular` environments and fix them.
-2. Confirm T0--T10 that apply exist; **confirm T1--T5 each contain Hand (or hand-equivalent) numeric columns**, not equations-only.
+2. Confirm **TA** exists and lists host + model(s); confirm `agent_provenance.md` matches the PDF; confirm T0--T10 that apply exist; **confirm T1--T5 each contain Hand (or hand-equivalent) numeric columns**, not equations-only.
 3. Confirm Step 4 has visible **4.0--4.4** and **4.3 has per-node KCL / Miller equations** (not only an \(A(s)\) equation).
 4. Confirm every distinct \(g_m\) role has a numeric hand evaluation in Step 2 / T2.
 5. Confirm T6 Hand for core rows is filled on every healthy backend (scale from primary if needed).
@@ -344,15 +370,15 @@ Prefer PDF/PNG in `figures/` with `\includegraphics` (verify curves visible in t
 
 All must be true:
 
-1. `report.pdf` with **TOC links**, full §2 algebra (anti-skip pass) including **Steps 4.0--4.4 with per-node 4.3 equations** and **7.1--7.5**, Step 8 when data allow; hand numbers from **final** OP; **mandatory T1--T5 Hand tables** mirrored from algebra; **metrics tables paired with figures**; **DUT netlist + params in appendix**.
+1. `report.pdf` with **TOC links**, **TA agentic provenance**, full §2 algebra (anti-skip pass) including **Steps 4.0--4.4 with per-node 4.3 equations** and **7.1--7.5**, Step 8 when data allow; hand numbers from **final** OP; **mandatory T1--T5 Hand tables** mirrored from algebra; **metrics tables paired with figures**; **DUT netlist + params in appendix**.
 2. `cmos` done (unless `pdk_only`) **and** every **default/requested** open PDK present (`sky130`/`ihp`/`gf180`) has nominal + corners + MC + §4e (or documented hard-skip/opt-out).
-3. Comparison tables + cross-backend summary **fully filled** (T6--T10); no blank/`---` placeholder cells -- use typed `no hand model` / `HARD-SKIP: …` / `n/a` per §6.
+3. Comparison tables + cross-backend summary **fully filled** (T6--T10); no blank/`---` placeholder cells -- use typed `no hand model` / `HARD-SKIP: …` / `n/a` per §6; **TA filled** (or honest `unknown (not disclosed by host)` for Model only).
 4. **Figure checklist F1--F10** embedded or hard-skipped with reason; **F1/F2 include hand-vs-sim Bode overlays** per healthy backend when §2 TF exists.
-5. Pre-PDF audit 6b passed (tables + TF depth).
-6. **Single** `results/<run_id>/` remains for this DUT (no leftover timestamped siblings; paths in PDF/summary point only there).
-7. User reply (English): PDF path, pass/fail per PDK, coverage, top mismatches, recovery notes.
+5. Pre-PDF audit 6b passed (tables + TF depth + TA).
+6. **Single** `results/<run_id>/` remains for this DUT (no leftover timestamped siblings; paths in PDF/summary point only there); `agent_provenance.md` present.
+7. User reply (English): PDF path, pass/fail per PDK, coverage, top mismatches, recovery notes, **primary host/model from TA**.
 
-**Not done:** headings without algebra; **equations without mandatory T1--T5 Hand tables**; **TF formula dump without how/why / without per-node 4.3 equations**; figures without tables (or vice versa for core metrics); **half-empty tables**; **`no hand model` on core \(A_0\)/GBW/PM/\(P\)** when a TF exists; missing netlist appendix; **dataset/suite branding** in report or user summary (AnalogGym or any other platform -- see Inputs); **non-English prose** (Chinese or other) in `report.tex` / PDF / `summary.md` / chat wrap-up; claiming CMRR/PSRR/noise/corners/MC without plots (or hard-skip); `cmos`-only evidence as PDK proof; skipping present IHP/GF180 without user opt-out or fetch failure note; TOC missing; **sim-only Bode when hand poles/zeros were derived** (must overlay or hard-skip with reason); **multiple timestamped / duplicate `results/` folders for the same analysis** (must consolidate to one main `results/<run_id>/`).
+**Not done:** headings without algebra; **equations without mandatory T1--T5 Hand tables**; **TF formula dump without how/why / without per-node 4.3 equations**; figures without tables (or vice versa for core metrics); **half-empty tables**; **`no hand model` on core \(A_0\)/GBW/PM/\(P\)** when a TF exists; missing netlist appendix; **missing TA / agent_provenance.md**; **dataset/suite branding** in report or user summary (AnalogGym or any other platform -- see Inputs); **non-English prose** (Chinese or other) in `report.tex` / PDF / `summary.md` / chat wrap-up; claiming CMRR/PSRR/noise/corners/MC without plots (or hard-skip); `cmos`-only evidence as PDK proof; skipping present IHP/GF180 without user opt-out or fetch failure note; TOC missing; **sim-only Bode when hand poles/zeros were derived** (must overlay or hard-skip with reason); **multiple timestamped / duplicate `results/` folders for the same analysis** (must consolidate to one main `results/<run_id>/`).
 
 ## Output to the user
 
@@ -361,18 +387,20 @@ All must be true:
 3. Backends / corners / MC / extended specs (+ hard-skips)
 4. Top 1--3 mismatches
 5. §4b / fit changes if any
+6. **Agentic models** used (short: host + primary model; point at TA / `agent_provenance.md` if multi-model)
 
 All of the above must be in **English** (see Language rule).
 
 ## Rules
 
-- **Language (hard rule) -- English only.** Every user-visible spice-analyzer artifact and reply must be English: `report.tex` / `report.pdf` (title, TOC, sections, captions, tables, body, appendix notes), `summary.md`, `fit.md` / `recovery.md` / `mc_summary.md`, figure labels/titles drawn by plot scripts, and the final chat summary. Do **not** write Chinese (or other non-English prose) into reports or skill status messages -- including when a subagent authors LaTeX. Technical symbols, SI units, netlist identifiers, and verbatim source paths are fine. Before `pdflatex`, scan `report.tex` / `summary.md` for CJK (`[\u4e00-\u9fff]`) and remove/replace any hits. Prefer an explicit English `\date{...}` (or `english` babel) over locale-dependent `\today` on Chinese TeX installs (e.g. CTeX). **Plot titles/labels must be ASCII-only** (use `-` / `--`, never Unicode em-dash `—` or minus `−`): Windows PowerShell + System.Drawing often mojibakes those into CJK (e.g. `corners — UGF` -> `corners 欽?UGF`).
+- **Language (hard rule) -- English only.** Every user-visible spice-analyzer artifact and reply must be English: `report.tex` / `report.pdf` (title, TOC, sections, captions, tables, body, appendix notes), `summary.md`, `agent_provenance.md`, `fit.md` / `recovery.md` / `mc_summary.md`, figure labels/titles drawn by plot scripts, and the final chat summary. Do **not** write Chinese (or other non-English prose) into reports or skill status messages -- including when a subagent authors LaTeX. Technical symbols, SI units, netlist identifiers, and verbatim source paths are fine. Before `pdflatex`, scan `report.tex` / `summary.md` for CJK (`[\u4e00-\u9fff]`) and remove/replace any hits. Prefer an explicit English `\date{...}` (or `english` babel) over locale-dependent `\today` on Chinese TeX installs (e.g. CTeX). **Plot titles/labels must be ASCII-only** (use `-` / `--`, never Unicode em-dash `—` or minus `−`): Windows PowerShell + System.Drawing often mojibakes those into CJK (e.g. `corners — UGF` -> `corners 欽?UGF`).
 - **No dataset/platform branding** (AnalogGym or any other suite) -- path/paste only; analyze netlist contents (Inputs hard rule). Applies to PDF, `summary.md`, and chat.
 - Prefer adapting a user-supplied TB when present; always copy adapted decks into `results/` only. Never require an in-repo benchmark TB.
 - Never claim match without both hand and sim numbers.
 - **No skipped intermediate algebra** (§2 anti-skip); **TF must include how/why (Steps 4.0--4.4) with per-node 4.3 equations**.
 - **Power 7.1--7.5 mandatory.**
-- **Tables fully filled** (T0--T10; **T1--T5 mandatory** with Hand columns mirrored from algebra; §6 empty-cell policy).
+- **Tables fully filled** (TA + T0--T10; **T1--T5 mandatory** with Hand columns mirrored from algebra; §6 empty-cell policy).
+- **Agentic provenance mandatory** -- table TA + `agent_provenance.md`; do not invent model ids; use `unknown (not disclosed by host)` when needed.
 - **Do not** put Hand-only-in-equations; every Hand number needed later must appear in T1--T6 as applicable.
 - **Embed plots** (checklist F1--F10); data files alone are insufficient.
 - **F1/F2 hand TF overlay** on every healthy backend when §2 defines poles/zeros (see checklist).
@@ -384,4 +412,4 @@ All of the above must be in **English** (see Language rule).
 
 ## Additional resources
 
-- Plot recipes, TOC/hyperref skeleton, multi-PDK includes, corners/MC, hand-analysis depth (**TF how/why**), table templates, **source-path wording**: [reference.md](reference.md)
+- Plot recipes, TOC/hyperref skeleton, multi-PDK includes, corners/MC, hand-analysis depth (**TF how/why**), table templates, **agentic provenance (TA)**, **source-path wording**: [reference.md](reference.md)
