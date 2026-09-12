@@ -1,0 +1,10 @@
+- N: 200
+- mode: LOT mc=1
+- ugf_mean_Hz: 128699660.0
+- ugf_std_Hz: 3185924.1083867643
+- ugf_min_Hz: 119831000.0
+- ugf_max_Hz: 138108000.0
+- pm_mean_deg: 89.2022785
+- pm_std_deg: 0.01995163872342289
+- pm_min_deg: 89.1538
+- pm_max_deg: 89.2577

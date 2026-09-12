@@ -1,0 +1,25 @@
+* Fitted GF180 3.3V (meters)
+.param CURRENT_0_BIAS=50u
+.param CAPACITOR_0=2p
+.param CLOAD=10p
+.param MOSFET_8_2_L_gm1_PMOS=0.7u
+.param MOSFET_8_2_W_gm1_PMOS=20u
+.param MOSFET_8_2_M_gm1_PMOS=8
+.param MOSFET_10_1_L_gm2_PMOS=0.7u
+.param MOSFET_10_1_W_gm2_PMOS=16u
+.param MOSFET_10_1_M_gm2_PMOS=8
+.param MOSFET_11_1_L_gmf2_PMOS=0.7u
+.param MOSFET_11_1_W_gmf2_PMOS=10u
+.param MOSFET_11_1_M_gmf2_PMOS=16
+.param MOSFET_23_1_L_gm3_NMOS=0.7u
+.param MOSFET_23_1_W_gm3_NMOS=20u
+.param MOSFET_23_1_M_gm3_NMOS=16
+.param MOSFET_0_8_L_BIASCM_PMOS=0.7u
+.param MOSFET_0_8_W_BIASCM_PMOS=4u
+.param MOSFET_0_8_M_BIASCM_PMOS=8
+.param MOSFET_17_7_L_BIASCM_NMOS=0.7u
+.param MOSFET_17_7_W_BIASCM_NMOS=4u
+.param MOSFET_17_7_M_BIASCM_NMOS=4
+.param MOSFET_21_2_L_LOAD2_NMOS=0.7u
+.param MOSFET_21_2_W_LOAD2_NMOS=8u
+.param MOSFET_21_2_M_LOAD2_NMOS=4

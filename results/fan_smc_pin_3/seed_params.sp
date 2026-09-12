@@ -1,0 +1,25 @@
+* Seed (placeholder W=L=1u) -- overridden per backend after fit
+.param MOSFET_10_1_L_gm2_PMOS=1u
+.param MOSFET_10_1_M_gm2_PMOS=8
+.param MOSFET_10_1_W_gm2_PMOS=1u
+.param MOSFET_11_1_L_gmf2_PMOS=1u
+.param MOSFET_11_1_M_gmf2_PMOS=32
+.param MOSFET_11_1_W_gmf2_PMOS=1u
+.param MOSFET_23_1_L_gm3_NMOS=1u
+.param MOSFET_23_1_M_gm3_NMOS=16
+.param MOSFET_23_1_W_gm3_NMOS=1u
+.param MOSFET_8_2_L_gm1_PMOS=1u
+.param MOSFET_8_2_M_gm1_PMOS=4
+.param MOSFET_8_2_W_gm1_PMOS=1u
+.param MOSFET_0_8_L_BIASCM_PMOS=1u
+.param MOSFET_0_8_M_BIASCM_PMOS=16
+.param MOSFET_0_8_W_BIASCM_PMOS=1u
+.param MOSFET_17_7_L_BIASCM_NMOS=1u
+.param MOSFET_17_7_M_BIASCM_NMOS=4
+.param MOSFET_17_7_W_BIASCM_NMOS=1u
+.param MOSFET_21_2_L_LOAD2_NMOS=1u
+.param MOSFET_21_2_M_LOAD2_NMOS=4
+.param MOSFET_21_2_W_LOAD2_NMOS=1u
+.param CAPACITOR_0=5p
+.param CURRENT_0_BIAS=60u
+.param CLOAD=10p

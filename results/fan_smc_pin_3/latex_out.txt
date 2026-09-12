@@ -1,0 +1,624 @@
+Rc files read:
+  /etc/LatexMk
+Latexmk: This is Latexmk, John Collins, 20 November 2021, version: 4.76.
+Rule 'pdflatex': The following rules & subrules became out-of-date:
+      'pdflatex'
+------------
+Run number 1 of rule 'pdflatex'
+------------
+------------
+Running 'pdflatex  -interaction=nonstopmode -recorder  "report.tex"'
+------------
+Latexmk: applying rule 'pdflatex'...
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./report.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21>
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/translations/translations.sty
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/bookmark/bookmark.sty
+(/usr/share/texlive/texmf-dist/tex/latex/bookmark/bkm-pdftex.def))
+(./report.aux)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictio
+nary-english.trsl)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+(./report.toc) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 130.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 130.
+
+[3]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 184.
+
+[4]
+Overfull \hbox (4.98744pt too wide) in paragraph at lines 253--254
+\OT1/cmr/m/n/9 Key $\OML/cmm/m/it/9 V[] \OMS/cmsy/m/n/9 ! \OML/cmm/m/it/9 V[]$ 
+\OT1/cmr/m/n/9 paths: bias diode xm0; mir-rors xm1--xm7; tail xm4; folded stack
+s xm15/16/19/20; stage2 xm10/21/22;
+[5] [6 <./cmos/figures/bode_mag_overlay.png>] [7 <./cmos/figures/bode_phase_ove
+rlay.png>]
+
+! LaTeX Error: \mathrm allowed only in math mode.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.388 ...kHz & no hand model & 1000000.00\,\mathrm
+                                                  {\mu V}/\sqrt{\mathrm{Hz}}...
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.388 ...& no hand model & 1000000.00\,\mathrm{\mu
+                                                   V}/\sqrt{\mathrm{Hz}} & n...
+
+! Extra }, or forgotten $.
+l.388 ...o hand model & 1000000.00\,\mathrm{\mu V}
+                                                  /\sqrt{\mathrm{Hz}} & n/a ...
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Extra }, or forgotten $.
+<inserted text> }
+                 
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+! Missing } inserted.
+<inserted text> 
+                }
+l.388 ...0.00\,\mathrm{\mu V}/\sqrt{\mathrm{Hz}} &
+                                                   n/a & n/a \\
+(That makes 100 errors; please try again.)
+!  ==> Fatal error occurred, no output PDF file produced!
+Transcript written on report.log.
+Failure to make 'report.pdf'
+Collected error summary (may duplicate other messages):
+  pdflatex: Command for 'pdflatex' gave return code 1
+      Refer to 'report.log' for details
+Latexmk: Examining 'report.log'
+=== TeX engine is 'pdfTeX'
+Latexmk: Errors, in force_mode: so I tried finishing targets

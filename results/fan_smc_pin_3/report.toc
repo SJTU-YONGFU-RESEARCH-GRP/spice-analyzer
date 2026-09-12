@@ -1,0 +1,37 @@
+\contentsline {section}{\numberline {1}Analysis provenance}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Agentic models}{3}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Circuit under test}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Netlist and topology}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Device sizing table}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Backends, corners, MC scope}{3}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Small-signal analysis (step-by-step)}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Step 0 --- Assumptions}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Step 1 --- Bias currents}{4}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Step 2 --- Transconductances}{4}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Step 3 --- Stage \(R_{\mathrm {out}}\) and gains}{4}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Step 4 --- Compensation / TF}{5}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}4.0 Signal path}{5}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {3.5.2}4.1 Small-signal model}{5}{subsubsection.3.5.2}%
+\contentsline {subsubsection}{\numberline {3.5.3}4.2 Why each singularity}{5}{subsubsection.3.5.3}%
+\contentsline {subsubsection}{\numberline {3.5.4}4.3 Derive reduced \(A(s)\)}{5}{subsubsection.3.5.4}%
+\contentsline {subsubsection}{\numberline {3.5.5}4.4 Named formulas}{5}{subsubsection.3.5.5}%
+\contentsline {subsection}{\numberline {3.6}Step 5 --- GBW and poles/zeros}{6}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Step 6 --- Phase margin}{6}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.8}Step 7 --- Power}{6}{subsection.3.8}%
+\contentsline {subsubsection}{\numberline {3.8.1}7.1 Branch map (T5)}{6}{subsubsection.3.8.1}%
+\contentsline {subsubsection}{\numberline {3.8.2}7.2--7.5 Ideal vs OP}{6}{subsubsection.3.8.2}%
+\contentsline {subsection}{\numberline {3.9}Step 8 --- FoM}{7}{subsection.3.9}%
+\contentsline {section}{\numberline {4}Simulation setup}{7}{section.4}%
+\contentsline {section}{\numberline {5}Results --- educational CMOS}{7}{section.5}%
+\contentsline {section}{\numberline {6}Results --- sky130}{8}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Nominal metrics table}{8}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Corners --- table and figures}{8}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Monte Carlo}{9}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Results --- IHP SG13G2}{9}{section.7}%
+\contentsline {section}{\numberline {8}Results --- GF180}{10}{section.8}%
+\contentsline {section}{\numberline {9}Cross-backend comparison}{11}{section.9}%
+\contentsline {section}{\numberline {10}Match assessment}{11}{section.10}%
+\contentsline {section}{\numberline {11}Appendix}{12}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Notes}{12}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}DUT netlist}{12}{subsection.11.2}%
+\contentsline {subsection}{\numberline {11.3}Fitted parameters (sky130)}{13}{subsection.11.3}%
