@@ -1,0 +1,103 @@
+* IHP mos_tt ACDC — leung_nmcf_pin_3 (NMCF)
+.title leung_nmcf_pin_3 ihp mos_tt ACDC
+
+.lib "../../../../models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib" mos_tt
+
+.include ./params.spice
+.include ./dut.spice
+
+.param supply_voltage={VDD}
+.param vcm_val={VCM}
+
+Vdd vdd 0 {supply_voltage}
+Vss vss 0 0
+
+Vindc opin 0 {vcm_val}
+Vin  signal_in 0 dc {vcm_val} ac 1
+
+Lfb opout opout_dc 1T
+Cin opout_dc signal_in 1T
+
+X1 vss vdd opout_dc opin opout leung_nmcf_pin_3
+Cload1 opout 0 {CLOAD}
+
+vcmdc cm0 0 {vcm_val}
+vcmac1 cm1 cm0 0 ac=1
+vcmac2 cm2 cm3 0 ac=1
+X2 vss vdd cm2 cm1 cm3 leung_nmcf_pin_3
+Cload2 cm3 0 {CLOAD}
+
+VVDDApsrr vddpsrr 0 {supply_voltage} AC=1
+X3 vss vddpsrr ppsr1 opin ppsr1 leung_nmcf_pin_3
+Cload3 ppsr1 0 {CLOAD}
+
+VGNDApsrr gndpsrr 0 0 AC=1
+X4 gndpsrr vdd npsr1 opin npsr1 leung_nmcf_pin_3
+Cload4 npsr1 0 {CLOAD}
+
+X5 vss vdd vout6 opin vout6 leung_nmcf_pin_3
+Cload5 vout6 0 {CLOAD}
+
+.control
+set filetype=ascii
+set units=degrees
+option savecurrents
+
+op
+let idd_op = -i(vdd)
+print v(opout) v(opout_dc) v(vout6)
+echo GM_BEGIN
+print @n.x1.xm8.nsg13_lv_pmos[gm]
+print @n.x1.xm9.nsg13_lv_pmos[gm]
+print @n.x1.xm10.nsg13_lv_pmos[gm]
+print @n.x1.xm23.nsg13_lv_nmos[gm]
+print @n.x1.xm11.nsg13_lv_pmos[gm]
+print @n.x1.xm8.nsg13_lv_pmos[gds]
+print @n.x1.xm10.nsg13_lv_pmos[gds]
+print @n.x1.xm23.nsg13_lv_nmos[gds]
+print @n.x1.xm22.nsg13_lv_nmos[gds]
+print @n.x1.xm6.nsg13_lv_pmos[gds]
+print @n.x1.xm8.nsg13_lv_pmos[ids]
+print @n.x1.xm10.nsg13_lv_pmos[ids]
+print @n.x1.xm23.nsg13_lv_nmos[ids]
+print @n.x1.xm11.nsg13_lv_pmos[ids]
+echo GM_END
+echo IDD_BEGIN
+print idd_op
+echo IDD_END
+
+ac dec 40 1 1G
+meas ac dcgain_ find vdb(opout) at=1
+let dcgain = abs(dcgain_)
+meas ac ugf_hz when vdb(opout)=0
+meas ac phase_at_ugf find vp(opout) when vdb(opout)=0
+let pm_deg = phase_at_ugf
+meas ac cmrrdc find vdb(cm3) at=1
+meas ac DCPSRp find vdb(ppsr1) at=1
+meas ac DCPSRn find vdb(npsr1) at=1
+let cmrr_dc_db = abs(cmrrdc)
+let psrrp_dc_db = abs(DCPSRp)
+let psrrn_dc_db = abs(DCPSRn)
+
+wrdata ../sim/bode_mag.dat vdb(opout)
+wrdata ../sim/bode_phase.dat vp(opout)
+wrdata ../figures/bode_mag.dat vdb(opout)
+wrdata ../figures/bode_phase.dat vp(opout)
+wrdata ../figures/cmrr.dat vdb(cm3)
+wrdata ../figures/psrrp.dat vdb(ppsr1)
+wrdata ../figures/psrrn.dat vdb(npsr1)
+wrdata ../sim/cmrr.dat vdb(cm3)
+wrdata ../sim/psrrp.dat vdb(ppsr1)
+wrdata ../sim/psrrn.dat vdb(npsr1)
+
+echo METRICS_BEGIN
+print dcgain ugf_hz pm_deg cmrr_dc_db psrrp_dc_db psrrn_dc_db
+echo METRICS_END
+
+noise v(opout) Vin dec 20 1 100Meg
+setplot noise1
+wrdata ../sim/noise.dat inoise_spectrum
+wrdata ../figures/noise.dat inoise_spectrum
+
+.endc
+.end

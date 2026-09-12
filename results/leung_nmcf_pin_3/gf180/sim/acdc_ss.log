@@ -1,0 +1,52 @@
+Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+Note: No compatibility mode selected!
+
+
+Circuit: leung_nmcf_pin_3 gf180 ss ACDC
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  0.00000e+00Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+
+No. of Data Rows : 1
+v(opout) = 1.656765e+00
+IDD_BEGIN
+idd_op = 5.263650e-04
+IDD_END
+@m.x1.xm8.m0[gm] = 1.716075e-04
+@m.x1.xm10.m0[gm] = 6.964508e-05
+@m.x1.xm23.m0[gm] = 2.392117e-04
+@m.x1.xm11.m0[gm] = 1.755789e-04
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  1.00000e+00
+No. of Data Rows : 361
+dcgain_             =  1.08112e+02
+ugf_hz              =  2.67776e+05
+Note: Starting dynamic gmin stepping
+Note: Dynamic gmin stepping completed
+phase_at_ugf        =  8.62926e+01
+cmrrdc              =  -5.58448e+01
+dcpsrp              =  -6.44603e+01
+dcpsrn              =  -1.00645e+02
+METRICS_BEGIN
+dcgain = 1.081117e+02
+ugf_hz = 2.677764e+05
+pm_deg = 8.629261e+01
+cmrr_dc_db = 5.584476e+01
+psrrp_dc_db = 6.446034e+01
+psrrn_dc_db = 1.006447e+02
+METRICS_END
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+ Reference value :  1.00000e+00
+No. of Data Rows : 161
+
+No. of Data Rows : 1
+Note: Simulation executed from .control section 

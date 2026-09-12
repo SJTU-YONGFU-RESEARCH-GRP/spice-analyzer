@@ -1,0 +1,8 @@
+* IHP SG13G2 OSDI load (ngspice >=41)
+setcs sourcepath = ( $sourcepath /home/yongfu/proj/spice-analyzer/spice-analyzer-skill/models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/models )
+osdi /home/yongfu/proj/spice-analyzer/spice-analyzer-skill/models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/osdi/psp103.osdi
+osdi /home/yongfu/proj/spice-analyzer/spice-analyzer-skill/models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/osdi/psp103_nqs.osdi
+osdi /home/yongfu/proj/spice-analyzer/spice-analyzer-skill/models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/osdi/r3_cmc.osdi
+osdi /home/yongfu/proj/spice-analyzer/spice-analyzer-skill/models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/osdi/mosvar.osdi
+osdi /home/yongfu/proj/spice-analyzer/spice-analyzer-skill/models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/osdi/cap_cmomi.osdi
+osdi /home/yongfu/proj/spice-analyzer/spice-analyzer-skill/models/pdk/ihp-sg13g2/ihp-sg13g2/libs.tech/ngspice/osdi/cap_cmomf.osdi

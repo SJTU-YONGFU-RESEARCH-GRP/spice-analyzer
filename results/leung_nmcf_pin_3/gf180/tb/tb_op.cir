@@ -1,0 +1,17 @@
+.title gf op
+.include ../../../../models/pdk/gf180mcu_fd_pr/models/ngspice/design.ngspice
+.lib ../../../../models/pdk/gf180mcu_fd_pr/models/ngspice/sm141064.ngspice typical
+.include ./params.spice
+.include ./dut.spice
+Vdd vdd 0 {VDD}
+Vss vss 0 0
+Vinp vinp 0 {VCM}
+Vinn vinn 0 {VCM}
+X1 vss vdd vinn vinp vout leung_nmcf_pin_3
+Cload vout 0 {CLOAD}
+.control
+op
+show m.x1.* > ../sim/show_devices.txt
+print v(vout) -i(vdd)
+.endc
+.end

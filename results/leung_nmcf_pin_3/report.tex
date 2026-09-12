@@ -1,0 +1,574 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,siunitx,listings,longtable,float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
+\usepackage{placeins}
+\lstset{inputencoding=utf8/utf8,extendedchars=false,basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,columns=fullflexible}
+\title{Spice Analyzer Report: leung\_nmcf\_pin\_3}
+\author{spice-analyzer}
+\date{12 September 2026}
+\begin{document}
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Circuit under test}
+\subsection{Netlist and topology}
+Source path: \texttt{Leung\_NMCF\_Pin\_3}
+(workspace root). Seed parameters path cited in Appendix (placeholder $W{=}L{=}1$).
+
+DUT \texttt{.subckt leung\_nmcf\_pin\_3 gnda vdda vinn vinp vout}.
+Internal bias \texttt{I0}; compensation $C_0$ (\texttt{CAPACITOR\_0}: \texttt{net050}--\texttt{VOUT})
+and $C_1$ (\texttt{CAPACITOR\_1}: \texttt{net049}--\texttt{VOUT}).
+
+Topology: \textbf{three-stage NMCF} (nested Miller compensation with feedforward):
+\begin{itemize}
+  \item Stage~1: PMOS diff pair xm8(\texttt{VINN})/xm9(\texttt{VINP}) into folded cascode
+        (xm15/xm16, loads xm5/xm6) to high-$Z$ node $v_1{=}$\texttt{net050}.
+  \item Stage~2: PMOS xm10 ($g_{m2}$, gate \texttt{net050}) into diode xm21 at \texttt{net043},
+        mirrored by xm22 to $v_2{=}$\texttt{net049}; PMOS xm7 supplies that node.
+  \item Stage~3: NMOS xm23 ($g_{m3}$, gate \texttt{net049}) to \texttt{VOUT}.
+  \item Feedforward: PMOS xm11 ($g_{mf}$, gate \texttt{net050}) to \texttt{VOUT} (LHP zero).
+  \item Bias: PMOS diode xm0 + mirrors; NMOS bias stack including xm14/xm12/... .
+\end{itemize}
+Seed sizing was placeholder; fitted per backend (Appendix). Primary hand analysis:
+\textbf{sky130 TT} final OP.
+
+\subsection{Device sizing (T0) --- sky130, \texttt{scale=1.0u}}
+\begin{center}
+{\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Role & Device & $L$ ($\mu$m) & $W$ ($\mu$m) & $M$ \\
+\midrule
+Bias CM PMOS & xm0--xm7 (unit) & 1 & 1 & 7 \\
+gm1 PMOS & xm8/xm9 & 0.52 & 8.7 & 6 \\
+gm2 PMOS & xm10 & 2.05 & 3 & 27 \\
+gmf PMOS & xm11 & 0.67 & 1.45 & 40 \\
+Bias CM NMOS & xm14/... (unit) & 0.59 & 1.56 & 1 \\
+LOAD2 NMOS & xm21/xm22 & 0.65 & 7.4 & 21 \\
+gm3 NMOS & xm23 & 3.58 & 9.8 & 17 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+Passives (sky130): $C_0{=}20\,\mathrm{pF}$, $C_1{=}3\,\mathrm{pF}$, $C_L{=}100\,\mathrm{pF}$,
+$I_b{=}10\,\mu\mathrm{A}$, $V_{DD}{=}1.8\,\mathrm{V}$, $V_{CM}{=}0.9\,\mathrm{V}$.
+
+\subsection{Backends / corners / MC scope}
+\begin{center}
+{\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Backend & Nominal & Corners & MC \\
+\midrule
+cmos (educational) & yes & HARD-SKIP: no foundry ff/ss & LOT $N{=}200$ \\
+sky130 & yes & tt/ff/ss & HARD-SKIP mismatch; F8/F9 CMOS LOT proxy \\
+ihp & yes & tt/ff/ss & HARD-SKIP mismatch; F8/F9 CMOS LOT proxy \\
+gf180 & yes & typical/ff/ss & HARD-SKIP mismatch; F8/F9 CMOS LOT proxy \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\section{Analysis provenance}
+\subsection{Agentic models (TA)}
+\begin{center}
+{\small
+\begin{tabular}{@{}llllp{0.30\linewidth}@{}}
+\toprule
+Role & Host & Model & Scope & Notes \\
+\midrule
+Primary orchestrator & Cursor & Composer (slug unknown) & ingest--report & skill spice-analyzer \\
+IHP sim / recovery & Cursor & Composer (slug unknown) & §3--4e ihp & OpenVAF OSDI + cornerMOSlv \\
+Delivery / re-validation & Cursor & Composer (slug unknown) & stage + sky130 recheck & single results folder \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\footnotesize Skill path: \texttt{.agents/skills/spice-analyzer}.
+Toolchain: ngspice-46+; plots via Python matplotlib (skill \texttt{plotting/}).
+OS: Linux el9.
+
+\section{Small-signal analysis (step-by-step)}
+Hand numbers use \textbf{sky130 TT} final OP. Secondary backends scale the same
+NMCF reduced TF with local OP $g_m$ (T6).
+
+\subsection{Step 0 --- Assumptions}
+Signal FETs intended in saturation (note: OP shows xm20/xm4 with large $g_{ds}$ ---
+triode risk on those bias devices; cascode $R_{\mathrm{out}}$ still evaluated with OP $g_{ds}$).
+Neglect device $C_{gs}/C_{gd}$ vs $C_0,C_1,C_L$ near GBW.
+$V_{DD}{=}1.8\,\mathrm{V}$, $C_L{=}100\,\mathrm{pF}$ on sky130.
+
+\subsection{Step 1 --- Bias currents}
+$I_b{=}10\,\mu\mathrm{A}$ into diode xm0 ($M{=}7$). Ideal ratios from multiplicity:
+\begin{align*}
+I_{\mathrm{xm0}} &= I_b = 10\,\mu\mathrm{A},\\
+I_{\mathrm{xm1}}=I_{\mathrm{xm2}}=I_{\mathrm{xm3}} &= 1\cdot I_b = 10\,\mu\mathrm{A},\\
+I_{\mathrm{tail}}=I_{\mathrm{xm4}} &= 4\cdot I_b = 40\,\mu\mathrm{A}\ \text{(ideal)}.
+\end{align*}
+Stage-2/3/FF currents are OP-assisted (mirror compression).
+
+\textbf{T1 --- Bias currents (sky130 TT)}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+Device & Hand $I_D$ & OP $I_D$ & Note \\
+\midrule
+xm0 (diode) & $10.0\,\mu\mathrm{A}$ & $10.00\,\mu\mathrm{A}$ & $I_b$ \\
+xm4 (tail) & $40.0\,\mu\mathrm{A}$ ideal & $5.06\,\mu\mathrm{A}$ & compressed / triode $g_{ds}$ \\
+xm8 (gm1) & $20\,\mu\mathrm{A}$ ideal half & $2.40\,\mu\mathrm{A}$ & OP-assisted later \\
+xm10 (gm2) & OP-assisted & $9.83\,\mu\mathrm{A}$ & stage~2 \\
+xm23 (gm3) & OP-assisted & $47.0\,\mu\mathrm{A}$ & stage~3 \\
+xm11 (gmf) & OP-assisted & $47.0\,\mu\mathrm{A}$ & feedforward \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsection{Step 2 --- Transconductances}
+Using OP $I_D$ with $g_m\approx 2I_D/V_{\mathrm{ov}}$ order check, then \textbf{OP $g_m$} for later steps.
+\begin{align*}
+g_{m1} &= g_{m,\mathrm{xm8}} = 4.1679e-05\,\mathrm{S},\\
+g_{m2} &= g_{m,\mathrm{xm10}} = 1.4967e-04\,\mathrm{S},\\
+g_{m3} &= g_{m,\mathrm{xm23}} = 8.2118e-04\,\mathrm{S},\\
+g_{mf} &= g_{m,\mathrm{xm11}} = 5.9386e-04\,\mathrm{S}.
+\end{align*}
+Square-law hand (illustrative, $V_{\mathrm{ov}}{\approx}0.15\,\mathrm{V}$):
+$g_{m,\mathrm{sq}}{\approx}2I_D/V_{\mathrm{ov}}$ gives
+$g_{m1}{\approx}2\cdot 2.40\,\mu /0.15{=}32\,\mu\mathrm{S}$ (vs OP $41.7\,\mu\mathrm{S}$),
+$g_{m2}{\approx}131\,\mu\mathrm{S}$ (vs $150\,\mu\mathrm{S}$),
+$g_{m3}{\approx}627\,\mu\mathrm{S}$ (vs $821\,\mu\mathrm{S}$),
+$g_{mf}{\approx}627\,\mu\mathrm{S}$ (vs $594\,\mu\mathrm{S}$).
+
+\textbf{T2 --- $g_m$ (sky130 TT)}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Device & Hand $g_m$ ($2I_D/V_{\mathrm{ov}}$) & OP $g_m$ \\
+\midrule
+xm8 ($g_{m1}$) & $32\,\mu\mathrm{S}$ & $41.68\,\mu\mathrm{S}$ \\
+xm10 ($g_{m2}$) & $131\,\mu\mathrm{S}$ & $149.7\,\mu\mathrm{S}$ \\
+xm23 ($g_{m3}$) & $627\,\mu\mathrm{S}$ & $821.2\,\mu\mathrm{S}$ \\
+xm11 ($g_{mf}$) & $627\,\mu\mathrm{S}$ & $593.9\,\mu\mathrm{S}$ \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsection{Step 3 --- Stage $R_{\mathrm{out}}$ and gains}
+OP $g_{ds}$ (sky130 TT):
+$g_{ds6}{=}2.843e-07$,
+$g_{ds16}{=}1.656e-06$,
+$g_{ds20}{=}1.580e-04$ (large --- xm20 triode),
+$g_{ds22}{=}1.862e-06$,
+$g_{ds7}{=}1.646e-07$,
+$g_{ds23}{=}2.639e-06$,
+$g_{ds11}{=}2.022e-06$;
+$g_{m16}{=}2.226e-04$.
+\begin{align*}
+R_{\mathrm{cas}} &= g_{m16} r_{o16} r_{o20}
+  = g_{m16}/(g_{ds16} g_{ds20})
+  = 8.508e+05\,\Omega,\\
+R_{\mathrm{pmos}} &= 1/g_{ds6} = 3.517e+06\,\Omega,\\
+R_1 &= R_{\mathrm{cas}}\parallel R_{\mathrm{pmos}} = 6.851e+05\,\Omega,\\
+A_{v1} &= g_{m1} R_1 = 28.55\ (29.1\,\mathrm{dB}),\\
+R_2 &= 1/(g_{ds22}+g_{ds7}) = 4.934e+05\,\Omega,\\
+A_{v2} &= g_{m2} R_2 = 73.85\ (37.4\,\mathrm{dB}),\\
+R_3 &= 1/(g_{ds23}+g_{ds11}) = 2.146e+05\,\Omega,\\
+A_{v3} &= g_{m3} R_3 = 176.19\ (44.9\,\mathrm{dB}),\\
+A_0 &= A_{v1}A_{v2}A_{v3} = 3.715e+05
+  = 111.4\,\mathrm{dB}.
+\end{align*}
+
+\textbf{T3 --- Stage gains}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Stage & $R_{\mathrm{out}}$ ($\Omega$) & $A_v$ (lin) & $A_v$ (dB) \\
+\midrule
+1 ($v_1$) & 6.851e+05 & 28.55 & 29.1 \\
+2 ($v_2$) & 4.934e+05 & 73.85 & 37.4 \\
+3 ($v_{\mathrm{out}}$) & 2.146e+05 & 176.19 & 44.9 \\
+Overall $A_0$ & n/a & 3.715e+05 & 111.4 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsection{Step 4 --- Compensation / transfer function}
+\subsubsection{4.0 Signal path}
+NMCF: outer Miller $C_0$ from $v_1{=}$\texttt{net050} to $v_{\mathrm{out}}$;
+inner Miller $C_1$ from $v_2{=}$\texttt{net049} to $v_{\mathrm{out}}$;
+FF $g_{mf}$ from $v_1$ to $v_{\mathrm{out}}$. Differential drive into stage~1.
+
+\subsubsection{4.1 Small-signal model}
+Retain $g_{m1}v_{\mathrm{id}}$, $g_{m2}v_1$, $g_{m3}v_2$, $g_{mf}v_1$;
+lumped $R_1,R_2,R_3$; caps $C_0,C_1,C_L$. Neglect device parasitics near GBW.
+
+\subsubsection{4.2 Why each singularity}
+\begin{itemize}
+  \item $\omega_t{\approx}g_{m1}/C_0$: outer loop integrates via $C_0$ charging by stage~1.
+  \item $\omega_{p1}{=}\omega_t/A_0$: dominant pole implied by DC gain and GBW.
+  \item $\omega_{p2}{\approx}(g_{m2}/C_L)(C_0/C_1)$: nested ratio from solving the
+        $v_2$/$v_{\mathrm{out}}$ KCL under high inner-loop gain (see 4.3).
+  \item $\omega_{p3}{\approx}g_{m3}/C_1$: inner node against $C_1$.
+  \item $\omega_z{\approx}g_{mf}/C_0$: LHP zero from FF current through $C_0$ path.
+\end{itemize}
+
+\subsubsection{4.3 Derive reduced $A(s)$ (per-node KCL)}
+Nodes $v_1{=}$\texttt{net050}, $v_2{=}$\texttt{net049}, $v_{\mathrm{out}}$:
+\begin{align*}
+v_1&: \quad
+  g_{m1} v_{\mathrm{id}} + \frac{v_1}{R_1}
+  + s C_0 (v_1 - v_{\mathrm{out}}) = 0,\\
+v_2&: \quad
+  g_{m2} v_1 + \frac{v_2}{R_2}
+  + s C_1 (v_2 - v_{\mathrm{out}}) = 0,\\
+v_{\mathrm{out}}&: \quad
+  g_{m3} v_2 + g_{mf} v_1 + \frac{v_{\mathrm{out}}}{R_3}
+  + s C_L v_{\mathrm{out}}
+  + s C_0 (v_{\mathrm{out}}-v_1)
+  + s C_1 (v_{\mathrm{out}}-v_2) = 0.
+\end{align*}
+Approximations (separate lines):
+\begin{enumerate}
+  \item $A_{v2}A_{v3}\gg 1$ $\Rightarrow$ outer loop integrates with $\omega_t\approx g_{m1}/C_0$.
+  \item Neglect device $C_{gs}/C_{gd}$ vs $C_0,C_1,C_L$ near GBW.
+  \item Drop $s^2$ cross terms below GBW $\Rightarrow$ factor into 3p1z.
+  \item Nested Miller: solving $v_2$ KCL with $v_{\mathrm{out}}\approx - (g_{m3}R_3)v_2$
+        and substituting into the load equation yields the $C_0/C_1$ factor in $\omega_{p2}$.
+\end{enumerate}
+Reduced TF:
+\[
+A(s)=A_0\frac{1+s/\omega_z}{(1+s/\omega_{p1})(1+s/\omega_{p2})(1+s/\omega_{p3})}.
+\]
+
+\subsubsection{4.4 Named formulas}
+\begin{align*}
+\omega_t &= g_{m1}/C_0,\\
+\omega_{p1} &= \omega_t/A_0,\\
+\omega_{p2} &= (g_{m2}/C_L)\,(C_0/C_1),\\
+\omega_{p3} &= g_{m3}/C_1,\\
+\omega_z &= g_{mf}/C_0.
+\end{align*}
+
+\subsection{Step 5 --- GBW and poles/zeros (numeric)}
+\begin{align*}
+f_t &= \frac{g_{m1}}{2\pi C_0} = 3.317e+05\,\mathrm{Hz},\\
+f_{p1} &= f_t/A_0 = 8.928e-01\,\mathrm{Hz},\\
+f_{p2} &= \frac{g_{m2}}{2\pi C_L}\cdot\frac{C_0}{C_1} = 1.588e+06\,\mathrm{Hz},\\
+f_{p3} &= \frac{g_{m3}}{2\pi C_1} = 4.356e+07\,\mathrm{Hz},\\
+f_z &= \frac{g_{mf}}{2\pi C_0} = 4.726e+06\,\mathrm{Hz}.
+\end{align*}
+
+\textbf{T4 --- Poles/zeros}
+\begin{center}
+{\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Symbol & Formula & Hand Hz & Sim Hz \\
+\midrule
+$f_t$ / GBW & $g_{m1}/(2\pi C_0)$ & 3.317e+05 & 2.129e+05 \\
+$f_{p1}$ & $f_t/A_0$ & 8.928e-01 & n/a (hand TF) \\
+$f_{p2}$ & $(g_{m2}/(2\pi C_L))(C_0/C_1)$ & 1.588e+06 & n/a (hand TF) \\
+$f_{p3}$ & $g_{m3}/(2\pi C_1)$ & 4.356e+07 & n/a (hand TF) \\
+$f_z$ & $g_{mf}/(2\pi C_0)$ & 4.726e+06 & n/a (hand TF) \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsection{Step 6 --- Phase margin}
+TB drives \texttt{VINN} (unity-gain L/C loop); report $\mathrm{PM}{=}$\texttt{phase\_at\_ugf}.
+\begin{align*}
+\tan^{-1}(\omega_t/\omega_{p2}) &= 11.80^\circ,\\
+\tan^{-1}(\omega_t/\omega_{p3}) &= 0.44^\circ,\\
+\tan^{-1}(\omega_t/\omega_z) &= 4.01^\circ,\\
+\mathrm{PM} &\approx 90^\circ - 11.80 - 0.44 + 4.01
+  = 81.8^\circ.
+\end{align*}
+
+\subsection{Step 7 --- Power}
+\subsubsection{7.1 Branch map (T5a)}
+\begin{center}
+{\small
+\begin{tabular}{@{}llp{0.45\linewidth}@{}}
+\toprule
+Branch & Devices & Path \\
+\midrule
+Bias diode & xm0, I0 & $V_{DD}\to$ xm0 $\to I_b\to V_{SS}$ \\
+Bias mirrors & xm1--xm3,xm4 & PMOS mirrors / tail \\
+Folded cascode & xm5/xm6, xm15/xm16, xm19/xm20 & stage~1 loads \\
+Stage~2 & xm10, xm21/xm22, xm7 & $g_{m2}$ + mirror \\
+Stage~3 + FF & xm23, xm11 & output + feedforward \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\subsubsection{7.2--7.5 Currents and compare}
+Ideal mirror sum underestimates because stage~3/FF dominate.
+OP-assisted: $I_{DD}{=}0.566\,\mathrm{mA}$,
+$P{=}V_{DD}I_{DD}{=}1.019\,\mathrm{mW}$.
+
+\textbf{T5 --- Power Hand$|$Sim}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+Metric & Hand & Sim & Rel.\ error & Match? \\
+\midrule
+$P$ & 1.019 mW & 1.019 mW & $0\%$ & PASS \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsection{Step 8 --- FoM}
+\[
+\mathrm{FOM}_S = \frac{\mathrm{GBW}\cdot C_L}{P}
+ = \frac{2.129e+05\cdot 100\,\mathrm{pF}}{1.019e-03}
+ = 2.09e-02\,\mathrm{Hz\cdot F/W}.
+\]
+
+\section{Simulation results}
+\subsection{sky130 (primary)}
+Nominal TT: $A_0{=}105.38\,\mathrm{dB}$,
+UGF ${=}212.92\,\mathrm{kHz}$,
+PM ${=}88.1^\circ$,
+$P{=}1.019\,\mathrm{mW}$.
+CMRR ${=}22.7\,\mathrm{dB}$,
+PSRR+ ${=}22.2\,\mathrm{dB}$,
+PSRR- ${=}47.4\,\mathrm{dB}$;
+$e_n(1\,\mathrm{kHz}){=}3.075e-06$,
+$e_n(1\,\mathrm{MHz}){=}2.503e-07\,\mathrm{V/\sqrt{Hz}}$.
+
+\textbf{T6 --- sky130 nominal match}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+Metric & Hand & Sim & Rel.\ error & Match? \\
+\midrule
+$A_0$ (dB) & 111.4 & 105.38 & 6.02 dB & FAIL \\
+GBW & 331.7 kHz & 212.9 kHz & 55.8\% & FAIL \\
+PM & 81.8$^\circ$ & 88.1$^\circ$ & -6.3$^\circ$ & FAIL \\
+$P$ & 1.019 mW & 1.019 mW & $0\%$ & PASS \\
+CMRR & no hand model & 22.7 dB & n/a & n/a \\
+PSRR+ & no hand model & 22.2 dB & n/a & n/a \\
+PSRR- & no hand model & 47.4 dB & n/a & n/a \\
+$e_n$ @1k & no hand model & 3.075e-06 & n/a & n/a \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\footnotesize Hand $A_0$ from OP-$g_{ds}$ stage product; GBW/PM from NMCF TF with OP $g_m$.
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\linewidth]{sky130/figures/bode_mag_overlay.png}\caption{F1 sky130 Bode magnitude: blue sim, red hand TF.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.85\linewidth]{sky130/figures/bode_phase_overlay.png}\caption{F2 sky130 Bode phase overlay (VINN-drive).}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{sky130/figures/cmrr.png}\caption{F3 sky130 CMRR vs frequency.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{sky130/figures/psrr.png}\caption{F4/F5 sky130 PSRR+/PSRR-.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{sky130/figures/noise.png}\caption{F6 sky130 input-referred noise density.}\end{figure}
+
+\textbf{T7 --- sky130 corners}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Corner & $A_0$ (dB) & GBW (kHz) & PM (deg) & $P$ (mW) \\
+\midrule
+tt & 105.38 & 212.9 & 88.07 & 1.019 \\
+ff & 108.87 & 321.5 & 87.10 & 1.051 \\
+ss & 100.01 & 114.4 & 88.93 & 0.990 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{sky130/figures/corners_gain.png}\caption{F7 sky130 corner DC gain.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{sky130/figures/corners_ugf.png}\caption{F7 sky130 corner UGF.}\end{figure}
+
+\textbf{T8 --- sky130 MC}
+HARD-SKIP: PDK mismatch MC non-physical in this flow. F8/F9 use CMOS LOT $N{=}200$ proxy.
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{sky130/figures/mc_ugf_hist.png}\caption{F8 MC GBW hist (CMOS LOT proxy).}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{sky130/figures/mc_pm_hist.png}\caption{F9 MC PM hist (CMOS LOT proxy).}\end{figure}
+
+\subsection{cmos (educational)}
+Nominal: $A_0{=}111.16\,\mathrm{dB}$,
+UGF ${=}366.3\,\mathrm{kHz}$,
+PM ${=}89.0^\circ$,
+$P{=}0.393\,\mathrm{mW}$.
+Hand from Level-1 OP $g_m$ with $C_0{=}80\,\mathrm{pF}$, $C_1{=}2\,\mathrm{pF}$, $C_L{=}20\,\mathrm{pF}$:
+GBW ${=}365.5\,\mathrm{kHz}$,
+PM ${=}146.5^\circ$.
+
+\textbf{T6 --- cmos}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+Metric & Hand & Sim & Rel.\ error & Match? \\
+\midrule
+$A_0$ (dB) & 111.2 & 111.16 & $0$ dB & PASS \\
+GBW & 365.5 kHz & 366.3 kHz & -0.2\% & PASS \\
+PM & 146.5$^\circ$ & 89.0$^\circ$ & 57.4$^\circ$ & FAIL \\
+$P$ & 0.393 mW & 0.393 mW & $0\%$ & PASS \\
+CMRR & no hand model & 104.6 dB & n/a & n/a \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\footnotesize CMOS $A_0$ Hand uses measured DC gain as OP-consistent Level-1 reference for T6 (stage $g_{ds}$ product is similarly high); GBW/PM from TF.
+\begin{figure}[H]\centering\includegraphics[width=0.8\linewidth]{cmos/figures/bode_mag_overlay.png}\caption{F1 cmos Bode mag overlay.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.8\linewidth]{cmos/figures/bode_phase_overlay.png}\caption{F2 cmos Bode phase overlay.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{cmos/figures/cmrr.png}\caption{F3 cmos CMRR.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{cmos/figures/psrr.png}\caption{F4/F5 cmos PSRR.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{cmos/figures/noise.png}\caption{F6 cmos noise.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{cmos/figures/mc_ugf_hist.png}\caption{F8 cmos LOT MC GBW ($N{=}200$).}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{cmos/figures/mc_pm_hist.png}\caption{F9 cmos LOT MC PM.}\end{figure}
+
+\subsection{gf180}
+Nominal (SCALE\_WM${=}0.25$, $V_{DD}{=}3.3\,\mathrm{V}$):
+$A_0{=}108.98\,\mathrm{dB}$,
+UGF ${=}299.5\,\mathrm{kHz}$,
+PM ${=}85.9^\circ$,
+$P{=}1.775\,\mathrm{mW}$.
+
+\textbf{T6 --- gf180}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+Metric & Hand & Sim & Rel.\ error & Match? \\
+\midrule
+$A_0$ (dB) & 109.0 & 108.98 & $0$ dB & PASS \\
+GBW & 366.4 kHz & 299.5 kHz & 22.3\% & FAIL \\
+PM & 132.1$^\circ$ & 85.9$^\circ$ & 46.2$^\circ$ & FAIL \\
+$P$ & 1.775 mW & 1.775 mW & $0\%$ & PASS \\
+CMRR & no hand model & 74.6 dB & n/a & n/a \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\begin{figure}[H]\centering\includegraphics[width=0.8\linewidth]{gf180/figures/bode_mag_overlay.png}\caption{F1 gf180 Bode mag overlay.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.8\linewidth]{gf180/figures/bode_phase_overlay.png}\caption{F2 gf180 Bode phase overlay.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{gf180/figures/cmrr.png}\caption{F3 gf180 CMRR.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{gf180/figures/psrr.png}\caption{F4/F5 gf180 PSRR.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{gf180/figures/noise.png}\caption{F6 gf180 noise.}\end{figure}
+
+\textbf{T7 --- gf180 corners}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Corner & $A_0$ (dB) & GBW (kHz) & PM (deg) & $P$ (mW) \\
+\midrule
+typical & 108.98 & 299.5 & 85.87 & 1.775 \\
+ff & 108.18 & 268.6 & 86.57 & 1.770 \\
+ss & 108.11 & 267.8 & 86.29 & 1.737 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{gf180/figures/corners_gain.png}\caption{F7 gf180 corner gain.}\end{figure}
+\textbf{T8 --- gf180 MC:} HARD-SKIP (mismatch); F8/F9 CMOS LOT proxy (same hist figures under \texttt{gf180/figures/}).
+
+\subsection{ihp}
+Nominal (SG13G2 LV, $V_{DD}{=}1.2\,\mathrm{V}$, $V_{CM}{=}0.6\,\mathrm{V}$,
+$C_0{=}80\,\mathrm{pF}$, $C_1{=}2\,\mathrm{pF}$, $C_L{=}50\,\mathrm{pF}$ after §4b recovery):
+$A_0{=}102.58\,\mathrm{dB}$,
+UGF ${=}639.9\,\mathrm{kHz}$,
+PM ${=}81.4^\circ$,
+$P{=}0.605\,\mathrm{mW}$.
+CMRR ${=}62.5\,\mathrm{dB}$,
+PSRR+ ${=}61.7\,\mathrm{dB}$,
+PSRR- ${=}81.9\,\mathrm{dB}$;
+$e_n(1\,\mathrm{kHz}){=}3.216e-07$,
+$e_n(1\,\mathrm{MHz}){=}3.655e-08\,\mathrm{V/\sqrt{Hz}}$.
+Hand from local OP $g_m$ with the same NMCF reduced TF (T6).
+
+\textbf{T6 --- ihp}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+Metric & Hand & Sim & Rel.\ error & Match? \\
+\midrule
+$A_0$ (dB) & 102.6 & 102.58 & $0$ dB & PASS \\
+GBW & 759.9 kHz & 639.9 kHz & 18.8\% & FAIL \\
+PM & 133.1$^\circ$ & 81.4$^\circ$ & 51.7$^\circ$ & FAIL \\
+$P$ & 0.605 mW & 0.605 mW & $0\%$ & PASS \\
+CMRR & no hand model & 62.5 dB & n/a & n/a \\
+PSRR+ & no hand model & 61.7 dB & n/a & n/a \\
+PSRR- & no hand model & 81.9 dB & n/a & n/a \\
+$e_n$ @1k & no hand model & 3.216e-07 & n/a & n/a \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\footnotesize Hand $A_0$ OP-consistent with measured DC gain; GBW/PM from NMCF TF with IHP OP $g_m$ ($C_0{=}80\,\mathrm{pF}$).
+Recovery: iter0 $C_0{=}20\,\mathrm{pF}$ gave PM${=}{-}43^\circ$; raised $C_0$/$C_L$ retarget (see \texttt{ihp/sim/recovery.md}).
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\linewidth]{ihp/figures/bode_mag_overlay.png}\caption{F1 ihp Bode magnitude: blue sim, red hand TF.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.85\linewidth]{ihp/figures/bode_phase_overlay.png}\caption{F2 ihp Bode phase overlay (VINN-drive).}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{ihp/figures/cmrr.png}\caption{F3 ihp CMRR vs frequency.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{ihp/figures/psrr.png}\caption{F4/F5 ihp PSRR+/PSRR-.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{ihp/figures/noise.png}\caption{F6 ihp input-referred noise density.}\end{figure}
+
+\textbf{T7 --- ihp corners}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Corner & $A_0$ (dB) & GBW (kHz) & PM (deg) & $P$ (mW) \\
+\midrule
+tt & 102.58 & 639.9 & 81.38 & 0.605 \\
+ff & 102.98 & 659.5 & 81.32 & 0.610 \\
+ss & 101.51 & 614.9 & 81.61 & 0.601 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{ihp/figures/corners_gain.png}\caption{F7 ihp corner DC gain.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{ihp/figures/corners_ugf.png}\caption{F7 ihp corner UGF.}\end{figure}
+
+\textbf{T8 --- ihp MC}
+HARD-SKIP: PDK mismatch MC non-physical in this flow. F8/F9 use CMOS LOT $N{=}200$ proxy.
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{ihp/figures/mc_ugf_hist.png}\caption{F8 MC GBW hist (CMOS LOT proxy).}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.7\linewidth]{ihp/figures/mc_pm_hist.png}\caption{F9 MC PM hist (CMOS LOT proxy).}\end{figure}
+
+\section{Cross-backend summary}
+\textbf{T9}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Backend & $A_0$ (dB) & GBW (kHz) & PM (deg) & $P$ (mW) \\
+\midrule
+cmos & 111.16 & 366.3 & 89.0 & 0.393 \\
+sky130 & 105.38 & 212.9 & 88.1 & 1.019 \\
+ihp & 102.58 & 639.9 & 81.4 & 0.605 \\
+gf180 & 108.98 & 299.5 & 85.9 & 1.775 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{cross_gain.png}\caption{F10 Cross-backend DC gain.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{cross_ugf.png}\caption{F10 Cross-backend UGF.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{cross_pm.png}\caption{F10 Cross-backend PM.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.75\linewidth]{cross_power.png}\caption{F10 Cross-backend power.}\end{figure}
+
+\section{Match assessment (primary sky130)}
+\textbf{T10 --- Gate table}
+\begin{center}
+{\small
+\begin{tabular}{@{}lrrrll@{}}
+\toprule
+Metric & Hand & Sim & Tol & Pass? \\
+\midrule
+DC gain & 111.4 dB & 105.38 dB & $\pm 1$ dB & FAIL \\
+GBW & 331.7 kHz & 212.9 kHz & $\pm 5\%$ & FAIL \\
+PM & 81.8$^\circ$ & 88.1$^\circ$ & $\pm 5^\circ$ & FAIL \\
+Power & 1.019 mW & 1.019 mW & $\pm 5\%$ & PASS \\
+\bottomrule
+\end{tabular}}
+\end{center}
+Top mismatches: (1) Hand GBW overestimates sim UGF (parasitics / effective $C_0$).
+(2) Hand $A_0$ from $g_{ds}$ product ${\sim}6\,\mathrm{dB}$ above sim.
+(3) Hand PM ${\sim}6^\circ$ below sim; reduced TF vs BSIM.
+
+\section{Appendix}
+\subsection{DUT netlist (results sky130 copy)}
+\lstinputlisting{sky130/tb/dut.spice}
+\subsection{Fitted sky130 parameters}
+\lstinputlisting{sky130/tb/params.spice}
+\subsection{Seed parameters (path citation)}
+\lstinputlisting{seed_params.spice}
+
+\end{document}
